@@ -1,10 +1,10 @@
 <template>
-    <div class="w-full card flex flex-col justify-content-center">
-        <nav class="flex flex-col gap-5">
+    <div class="flex flex-col w-full card justify-content-center">
+        <nav class="flex flex-col gap-4">
             <nuxtLink
-                class="flex w-full gap-5 items-center text-2xl py-2 px-3 bg-primary rounded-md text-gray-200 hover:bg-white/10"
+                class="flex items-center w-full gap-5 px-5 py-3 text-xl text-gray-200 rounded-md bg-primary hover:bg-white/10"
                 v-for="item in menuList" :to="item.url">
-                <Icon :name="item.icon" />
+                <Icon size="2rem" :name="item.icon" />
                 {{ item.label }}
             </nuxtLink>
         </nav>
@@ -15,7 +15,7 @@
 const menuList = ref([
     { label: 'Home', url: '/', icon: 'clarity:home-line' },
     { label: 'List', url: '/lists', icon: 'bx:basket' },
-    { label: 'Recipes', url: '/recipes', icon: 'octicon:book-16' }
+    { label: 'Recipes', url: '/recipes', icon: 'material-symbols:menu-book-outline' }
 ]);
 </script>
 

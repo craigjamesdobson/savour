@@ -18,7 +18,10 @@
     "postcss": "^8.4.29"
   },
   "dependencies": {
+    "@nuxtjs/supabase": "^1.0.2",
+    "@pinia/nuxt": "^0.4.11",
     "nuxt-icon": "^0.5.0",
-    "primevue": "^3.32.2"
+    "primevue": "^3.32.2",
+    "zod": "^3.22.2"
   }
 }

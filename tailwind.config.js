@@ -1,3 +1,5 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -16,7 +18,7 @@ module.exports = {
         sans: ['"Inter var"', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: "#262335",
+        primary: "#252A41",
         secondary: "#f9FAFB",
         accent: "#D1D5DB",
       },
