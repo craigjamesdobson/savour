@@ -1,21 +1,22 @@
 import { defineStore } from "pinia";
+import { Database } from "~/types/database.types";
 
 interface Item {
   id?: number;
   item_id: number;
-  description: string | undefined;
+  description: string | null;
 }
 
 interface Recipes {
   id: number;
-  name: string;
-  source: string;
-  header_image: string;
+  name: string | null;
+  source: string | null;
+  header_image: string | null;
   items: Item[];
 }
 
 export const useRecipeStore = defineStore("recipes", () => {
-  const supabase = useSupabaseClient();
+  const supabase = useSupabaseClient<Database>();
 
   const recipes = ref<Recipes[]>([]);
   const recipesLoaded = ref(false);
@@ -38,7 +39,7 @@ export const useRecipeStore = defineStore("recipes", () => {
       name: recipe.name,
       source: recipe.source,
       header_image: recipe.header_image,
-      items: recipe.items.map((item) => ({
+      items: recipe.items.map((item: any) => ({
         id: item.recipe_items[0].id,
         item_id: item.id,
         description: item.recipe_items[0].item_amount, // Assuming you want the first recipe_item
@@ -75,20 +76,23 @@ export const useRecipeStore = defineStore("recipes", () => {
     // Set the state to the newly created items array
     recipes.value[recipeIndex].items = updatedItems;
 
-    // Delete the id key so it can be used in database update
-    // delete data.id;
+    // Create object that will be used to update recipe_items database
+    const databaseObject = {
+      item_amount: data.description,
+      item_id: data.item_id
+    }
 
-    // // Update the database using the new data
-    // const { error } = await supabase
-    //   .from("recipe_items")
-    //   .update(data)
-    //   .eq("id", recipeItemID);
+    // Update the database using the new data
+    const { error } = await supabase
+      .from("recipe_items")
+      .update(databaseObject)
+      .eq("id", recipeItemID);
 
-    //   // If an error occurs reset the state back to the cached version and throw an error
-    //   if (error) {
-    //     recipes.value[recipeIndex].items = resetState;
-    //     throw new Error("Recipe ingredient was not updated");
-    //   }
+      // If an error occurs reset the state back to the cached version and throw an error
+      if (error) {
+        recipes.value[recipeIndex].items = resetState;
+        throw new Error("Recipe ingredient was not updated");
+      }
   };
 
 
