@@ -4,7 +4,6 @@ definePageMeta({
 });
 
 import Button from "primevue/button";
-import InputText from "primevue/InputText";
 
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
@@ -37,7 +36,8 @@ const signInWithOtp = async () => {
 <template>
     <div class="flex flex-col gap-5">
       <label for="username">Email</label>
-      <InputText
+      <input
+      type="text"
         id="username"
         v-model="state.email"
         aria-describedby="email-help"
