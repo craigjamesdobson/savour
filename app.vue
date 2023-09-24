@@ -1,6 +1,5 @@
 <template>
   <div>
-    <VitePwaManifest />
     <NuxtLayout>
        <NuxtPage />
     </NuxtLayout>
@@ -25,8 +24,6 @@ const hydrateApp = async () => {
       recipeStore.fetchRecipes(),
       itemsStore.fetchItems(),
     ]);
-
-    console.log(recipes, items);
     accountStore.dataLoaded = true;
   } catch (error) {
     throw error;
