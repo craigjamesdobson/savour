@@ -28,9 +28,9 @@
       <Editor v-model="activeRecipe.instructions" />
     </div>
     <div v-else class="ql-snow">
-      <div class="flex justify-between gap-5">
-        <div class="ql-editor" v-html="activeRecipe.ingredients"></div>
-        <div class="flex flex-col items-end gap-2 py-5">
+      <div class="flex flex-col-reverse justify-start gap-5 lg:flex-row md:justify-between">
+        <div class="!p-0 ql-editor" v-html="activeRecipe.ingredients"></div>
+        <div class="flex flex-col gap-2 py-5 lg:items-end">
           Serves {{ activeRecipe.servings }}
           <div class="flex gap-2">
             <Icon
@@ -39,20 +39,22 @@
               name="codicon:account"
             />
           </div>
+          <hr class="mt-5">
         </div>
       </div>
       <hr class="my-5" />
-      <div class="ql-editor" v-html="activeRecipe.instructions"></div>
+      <div class="!p-0 ql-editor" v-html="activeRecipe.instructions"></div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { useRecipeStore } from "@/stores/recipes";
-const recipeStore = useRecipeStore();
-
 import Editor from "primevue/editor";
 import "quill/dist/quill.snow.css";
+
+const recipeStore = useRecipeStore();
+
 
 const route = useRoute();
 const currentRoute = +route.params.id;

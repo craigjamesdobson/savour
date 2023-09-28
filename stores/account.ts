@@ -11,9 +11,12 @@ export const useAccountStore = defineStore("account", () => {
     user.value = data.user
   };
 
+  const isLoaded = computed(() => dataLoaded.value);
+
   return {
     user,
     dataLoaded,
+    isLoaded,
     fetchUser,
   };
 });
