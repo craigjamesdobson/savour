@@ -7,7 +7,7 @@
         <Icon size="2.5rem" name="fluent:bowl-salad-20-regular" /> SAVOUR
       </h1>
     </div>
-    <main class="w-full px-4 my-auto mb-20 md:h-full md:w-5/6">
+    <main class="w-full px-4 my-auto mb-20 md:px-10 md:h-full">
       <div class="h-full p-8 overflow-y-auto rounded-lg bg-secondary">
         <slot v-if="accountStore.dataLoaded" />
         <p v-else>Loading...</p>
