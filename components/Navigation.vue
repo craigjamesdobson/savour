@@ -35,7 +35,7 @@ const accountStore = useAccountStore();
 
 const menuList = ref([
   { label: "Home", url: "/", icon: "clarity:home-line" },
-  { label: "List", url: "/lists", icon: "bx:basket" },
+  { label: "Meal Plan", url: "/planner", icon: "tabler:calendar" },
   {
     label: "Recipes",
     url: "/recipes",
