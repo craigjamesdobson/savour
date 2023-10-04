@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col items-center w-full min-h-screen text-neutral-800 bg-primary">
-    <div class="my-5">
+    <nuxtLink to="/" class="my-5">
       <h1
         class="gap-2 text-4xl font-thin tracking-widest md:flex text-gray-50"
       >
         <Icon size="2.5rem" name="fluent:bowl-salad-20-regular" /> SAVOUR
       </h1>
-    </div>
+    </nuxtLink>
     <main class="w-full px-4 my-auto mb-20 md:px-10 md:h-full">
       <div class="h-full p-8 overflow-y-auto rounded-lg bg-secondary">
         <slot v-if="accountStore.dataLoaded" />

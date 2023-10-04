@@ -14,7 +14,7 @@
         v-if="!accountStore.user"
         to="/login"
       >
-        <Icon name="ant-design:login-outlined" />
+        <Icon size="2rem" name="ant-design:login-outlined" />
         <span class="hidden md:flex">Login</span>
       </nuxtLink>
       <nuxtLink
@@ -22,7 +22,7 @@
         v-else
         to="/account"
       >
-        <Icon size="1.5em" name="codicon:account" />
+        <Icon size="2rem" name="codicon:account" />
         <span class="hidden md:flex">Account</span>
       </nuxtLink>
     </nav>

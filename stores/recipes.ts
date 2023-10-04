@@ -1,23 +1,36 @@
 import { defineStore } from "pinia";
 import { Database } from "~/types/database.types";
-
+interface Category {
+  name: string | null;
+  icon: string | null;
+}
 interface Recipes {
   id: number;
   name: string | null;
   source: string | null;
   header_image: string | null;
-  description: string | null;
+  ingredients: string | null;
   instructions: string | null;
+  categories: Category[]
 }
 
 export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
 
-  const recipes = ref<Recipes[]>([]);
+  const recipes: Ref<Recipes[]> = ref([]);
   const recipesLoaded = ref(false);
 
   const fetchRecipes = async () => {
-    const { data, error } = await supabase.from("recipes").select("*");
+    const { data, error } = await supabase.from("recipes").select(`
+      id,
+      name,
+      source, 
+      header_image,
+      ingredients,
+      instructions, 
+      servings,
+      categories (name, icon)
+    `);
 
     if (error) {
       throw error;
