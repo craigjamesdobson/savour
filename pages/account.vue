@@ -14,6 +14,13 @@
 import { useAccountStore } from "@/stores/account";
 const accountStore = useAccountStore();
 const supabase = useSupabaseClient();
+const user = useSupabaseUser()
+
+watch(user, () => {
+  if (!user.value) {
+    return navigateTo('/login')
+  }
+}, { immediate: true })
 
 const handleSignOut = async () => {
   const { error } = await supabase.auth.signOut();
