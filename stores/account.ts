@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
+import { Database } from "~/types/database.types";
 
 export const useAccountStore = defineStore("account", () => {
-  const supabase = useSupabaseClient();
+  const supabase = useSupabaseClient<Database>();
 
-  const user = ref(null);
-  const dataLoaded = ref(false);
+  const user = ref();
+  const dataLoaded: Ref<boolean> = ref(false);
 
   const fetchUser = async () => {
     const { data } = await supabase.auth.getUser()

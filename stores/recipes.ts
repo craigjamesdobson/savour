@@ -11,8 +11,32 @@ interface Recipes {
   header_image: string | null;
   ingredients: string | null;
   instructions: string | null;
-  categories: Category[]
+  categories: Category[];
 }
+
+const sortRecipeByCategory = (recipes: Recipes[]) => {
+
+  // Create an object to hold categorized recipes
+  const categorisedRecipes: any = {};
+
+  // Iterate through the recipes and categorize them
+  recipes.forEach((recipe) => {
+    recipe.categories.forEach((category) => {
+      if (!categorisedRecipes[category.id]) {
+        categorisedRecipes[category.id] = {
+          ...category,
+          recipes: [],
+        };
+      }
+      categorisedRecipes[category.id].recipes.push(recipe);
+    });
+  });
+
+  // Convert the object into an array of categorized recipes
+  const categorisedRecipesArray = Object.values(categorisedRecipes);
+
+  return categorisedRecipesArray;
+};
 
 export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
@@ -29,7 +53,7 @@ export const useRecipeStore = defineStore("recipes", () => {
       ingredients,
       instructions, 
       servings,
-      categories (name, icon)
+      categories (id, name, icon)
     `);
 
     if (error) {
@@ -39,10 +63,7 @@ export const useRecipeStore = defineStore("recipes", () => {
     recipesLoaded.value = true;
   };
 
-  const updateRecipe = async (
-    recipeID: number,
-  ) => {
-
+  const updateRecipe = async (recipeID: number) => {
     // Using optimisitic UI patterns we will update the state first to keep
     // things fast and fluid and if the database update fails we will rollback
 
@@ -58,12 +79,15 @@ export const useRecipeStore = defineStore("recipes", () => {
       .update(recipes.value[recipeIndex])
       .eq("id", recipeID);
 
-      // If an error occurs reset the state back to the cached version and throw an error
-      if (error) {
-        throw new Error("Recipe ingredient was not updated");
-      }
+    // If an error occurs reset the state back to the cached version and throw an error
+    if (error) {
+      throw new Error("Recipe ingredient was not updated");
+    }
   };
 
+  const groupRecipesByCategory = computed(() =>
+    sortRecipeByCategory(recipes.value)
+  );
 
   const getRecipeById = computed(
     () => (id: number) => recipes.value.find((recipe) => recipe.id === id)
@@ -75,5 +99,6 @@ export const useRecipeStore = defineStore("recipes", () => {
     fetchRecipes,
     updateRecipe,
     getRecipeById,
+    groupRecipesByCategory,
   };
 });

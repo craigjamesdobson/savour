@@ -3,4 +3,22 @@ const removeProtocolFromUrl = (url: string) => {
   return url.replace(/^(https?:\/\/)?/, "");
 };
 
-export { removeProtocolFromUrl };
+const fetchCurrentDay = () => {
+  var currentDate = new Date();
+
+  var currentDay = currentDate.getDay();
+
+  var daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  return daysOfWeek[currentDay];
+};
+
+export { removeProtocolFromUrl, fetchCurrentDay };
