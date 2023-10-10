@@ -13,7 +13,7 @@
         <button v-if="!isEditMode" @click="isEditMode = true">
           <Icon size="1.5rem" name="tabler:edit" />
         </button>
-        <button v-else @click="handleRecipeUpdate">
+        <button v-else @click="handleMealPlanUpdate">
           <Icon size="1.5rem" name="fluent:save-16-regular" />
         </button>
       </div>
@@ -64,11 +64,22 @@
 import { FALLBACK_IMAGE } from "~/helpers/constants";
 import Dropdown from "primevue/dropdown";
 import { useRecipeStore } from "~/stores/recipes";
+import { usePlannerStore } from "~/stores/planner";
+import { Planner } from "~/types/planner.interface";
 
 const recipeStore = useRecipeStore();
-const modelValue = defineModel();
+const plannerStore = usePlannerStore();
+const modelValue: Ref<Planner | undefined> = defineModel();
 
 const isEditMode = ref(false);
+
+const handleMealPlanUpdate = () => {
+  if (!modelValue.value) throw new Error("Selected recipe does not exist");
+
+  plannerStore.updateMealPlan(modelValue.value.id, modelValue.value.recipe.id);
+  console.log(modelValue.value.id, modelValue.value.recipe.id);
+  isEditMode.value = false;
+};
 </script>
 
 <style scoped></style>

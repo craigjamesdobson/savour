@@ -1,20 +1,8 @@
 import { defineStore } from "pinia";
 import { Database } from "~/types/database.types";
-interface Category {
-  name: string | null;
-  icon: string | null;
-}
-interface Recipes {
-  id: number;
-  name: string | null;
-  source: string | null;
-  header_image: string | null;
-  ingredients: string | null;
-  instructions: string | null;
-  categories: Category[];
-}
+import { Recipe } from "@/types/recipe.interface";
 
-const sortRecipeByCategory = (recipes: Recipes[]) => {
+const sortRecipeByCategory = (recipes: Recipe[]) => {
 
   // Create an object to hold categorized recipes
   const categorisedRecipes: any = {};
