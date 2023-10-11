@@ -1,4 +1,5 @@
 interface Category {
+  id: number;
   name: string | null;
   icon: string | null;
 }
@@ -12,4 +13,4 @@ interface Recipe {
   categories: Category[];
 }
 
-export type { Recipe };
+export type { Recipe, Category };

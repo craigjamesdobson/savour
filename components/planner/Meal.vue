@@ -47,15 +47,10 @@
       modelValue.recipe.name
     }}</NuxtLink>
     <div class="flex gap-2">
-      <template v-for="category in modelValue.recipe.categories">
-        <span
-          :title="category.name ?? 'ingredient'"
-          v-if="category.icon"
-          class="flex items-center justify-center rounded-full w-7 h-7 bg-primary border-primary"
-        >
-          <Icon class="text-white" size="1.3rem" :name="category.icon" />
-        </span>
-      </template>
+      <RecipeCategory
+        v-for="category in modelValue.recipe.categories"
+        :category="category"
+      ></RecipeCategory>
     </div>
   </div>
 </template>
@@ -75,9 +70,7 @@ const isEditMode = ref(false);
 
 const handleMealPlanUpdate = () => {
   if (!modelValue.value) throw new Error("Selected recipe does not exist");
-
   plannerStore.updateMealPlan(modelValue.value.id, modelValue.value.recipe.id);
-  console.log(modelValue.value.id, modelValue.value.recipe.id);
   isEditMode.value = false;
 };
 </script>

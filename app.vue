@@ -34,8 +34,6 @@ const hydrateApp = async () => {
 if (accountStore.user?.value !== null) {
   hydrateApp();
 }
-
-
 </script>
 
 <style scoped>

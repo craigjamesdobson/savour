@@ -28,18 +28,19 @@
       <Editor v-model="activeRecipe.instructions" />
     </div>
     <div v-else class="ql-snow">
-      <div class="flex flex-col-reverse justify-start gap-5 lg:flex-row md:justify-between">
+      <div
+        class="flex flex-col-reverse justify-start gap-5 lg:flex-row md:justify-between"
+      >
         <div class="!p-0 ql-editor" v-html="activeRecipe.ingredients"></div>
         <div class="flex flex-col gap-2 py-5 lg:items-end">
-          Serves {{ activeRecipe.servings }}
-          <div class="flex gap-2">
-            <Icon
-              v-for="i in activeRecipe.servings"
-              size="1.5rem"
-              name="codicon:account"
-            />
+          <div class="flex gap-2 mb-2">
+            <RecipeCategory
+              v-for="category in activeRecipe.categories"
+              :category="category"
+            ></RecipeCategory>
           </div>
-          <hr class="mt-5">
+          <RecipeServings :servings="activeRecipe.servings"></RecipeServings>
+          <hr class="mt-5" />
         </div>
       </div>
       <hr class="my-5" />
@@ -55,7 +56,6 @@ import "quill/dist/quill.snow.css";
 
 const recipeStore = useRecipeStore();
 
-
 const route = useRoute();
 const currentRoute = +route.params.id;
 
@@ -64,8 +64,8 @@ const activeRecipe = ref(recipeStore.getRecipeById(currentRoute));
 
 const headerModel = reactive({
   activeRecipe,
-  isEditMode
-})
+  isEditMode,
+});
 </script>
 
 <style scoped></style>
