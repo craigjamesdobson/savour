@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
 import { Database } from "~/types/database.types";
-import { Recipe } from "@/types/recipe.interface";
+import { Category, Recipe } from "@/types/recipe.interface";
 
 const sortRecipeByCategory = (recipes: Recipe[]) => {
-
   // Create an object to hold categorized recipes
   const categorisedRecipes: any = {};
 
@@ -19,21 +18,19 @@ const sortRecipeByCategory = (recipes: Recipe[]) => {
       categorisedRecipes[category.id].recipes.push(recipe);
     });
   });
-
-  // Convert the object into an array of categorized recipes
   const categorisedRecipesArray = Object.values(categorisedRecipes);
-
   return categorisedRecipesArray;
 };
 
 export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
 
-  const recipes: Ref<Recipes[]> = ref([]);
+  const recipes: Ref<Recipe[]> = ref([]);
+  const cachedRecipes: Ref<Recipe[]> = ref([]);
   const recipesLoaded = ref(false);
 
   const fetchRecipes = async () => {
-    const { data, error } = await supabase.from("recipes").select(`
+    const { data, error: selectError } = await supabase.from("recipes").select(`
       id,
       name,
       source, 
@@ -44,33 +41,88 @@ export const useRecipeStore = defineStore("recipes", () => {
       categories (id, name, icon)
     `);
 
-    if (error) {
-      throw error;
+    if (selectError) {
+      throw new Error(selectError.message);
     }
+
     recipes.value = data;
+
+    // Create a cached version of the data that can be used for rollbacks
+    cachedRecipes.value = data;
     recipesLoaded.value = true;
   };
 
-  const updateRecipe = async (recipeID: number) => {
+  const updateRecipeCategories = async (recipe: Recipe) => {
+    // Delete any categories that are in this recipe
+    const { error: deleteError } = await supabase
+      .from("recipe_category")
+      .delete()
+      .eq("recipe_id", recipe.id);
+
+    if (deleteError) {
+      throw new Error(deleteError.message);
+    }
+
+    // Create a new array of data that will be used
+    // to update the database using the reactive state
+    const newRawCategoryData = recipe.categories.map((x) => ({
+      recipe_id: recipe.id,
+      category_id: x.id,
+    }));
+
+    // Update the recipe_category table with the new data
+    const { error: upsertError } = await supabase
+      .from("recipe_category")
+      .upsert(newRawCategoryData)
+      .select();
+
+    if (upsertError) {
+      throw new Error(upsertError.message);
+    }
+  };
+
+  const updateRecipe = async (recipe: Recipe) => {
+    // Create a new array of data that will be used
+    // to update the database using the reactive state
+    const { categories, ...rawRecipeData } = recipe;
+
+    // Update the database using the new data
+    const { error: updateError } = await supabase
+      .from("recipes")
+      .update(rawRecipeData)
+      .eq("id", recipe.id);
+
+    if (updateError) {
+      throw new Error(updateError.message);
+    }
+  };
+
+  const updateRecipeAndCategories = async (recipeID: number) => {
     // Using optimisitic UI patterns we will update the state first to keep
     // things fast and fluid and if the database update fails we will rollback
 
-    // Find the index of the current recipe
-    const recipeIndex = recipes.value.findIndex((x) => x.id === recipeID);
+    // Find the active recipe
+    const activeRecipe = recipes.value.find((x) => x.id === recipeID);
 
-    // Cache a version of the current items so it can be used to rollback state
-    const resetState = recipes.value[recipeIndex];
-
-    // Update the database using the new data
-    const { error } = await supabase
-      .from("recipes")
-      .update(recipes.value[recipeIndex])
-      .eq("id", recipeID);
-
-    // If an error occurs reset the state back to the cached version and throw an error
-    if (error) {
-      throw new Error("Recipe ingredient was not updated");
+    if (!activeRecipe) {
+      throw new Error("Error finding recipe");
     }
+
+    try {
+      // Use promise all to make sure all aspects of the recipe have been updated
+      await Promise.all([
+        updateRecipe(activeRecipe),
+        updateRecipeCategories(activeRecipe),
+      ]);
+    } catch (error) {
+      // If there was an error updating the database then reset the state
+      resetRecipeState();
+      throw new Error("Recipe failed to update");
+    }
+  };
+
+  const resetRecipeState = () => {
+    recipes.value = cachedRecipes.value;
   };
 
   const groupRecipesByCategory = computed(() =>
@@ -85,7 +137,7 @@ export const useRecipeStore = defineStore("recipes", () => {
     recipes,
     recipesLoaded,
     fetchRecipes,
-    updateRecipe,
+    updateRecipeAndCategories,
     getRecipeById,
     groupRecipesByCategory,
   };

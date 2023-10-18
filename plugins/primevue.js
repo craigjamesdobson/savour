@@ -3,6 +3,7 @@ import PrimeVue from "primevue/config";
 import Tailwind from "primevue/passthrough/tailwind";
 import InputNumber from "primevue/inputnumber";
 import ToastService from 'primevue/toastservice';
+// import Quill from 'quill';
 
 import Button from "primevue/button";
 

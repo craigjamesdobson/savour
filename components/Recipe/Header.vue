@@ -80,7 +80,7 @@ const recipeStore = useRecipeStore();
 const modelValue = defineModel();
 
 const handleRecipeUpdate = async () => {
-  await recipeStore.updateRecipe(modelValue.value.activeRecipe.id);
+  await recipeStore.updateRecipeAndCategories(modelValue.value.activeRecipe.id);
   modelValue.value.isEditMode = false;
 };
 </script>
