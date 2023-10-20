@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="`/recipes/${modelValue.recipe.id}`">
-    <img
+    <NuxtImg
       class="w-24 h-24 border rounded-lg"
       :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE"
       alt="main image"
@@ -60,7 +60,7 @@ import { FALLBACK_IMAGE } from "~/helpers/constants";
 import Dropdown from "primevue/dropdown";
 import { useRecipeStore } from "~/stores/recipes";
 import { usePlannerStore } from "~/stores/planner";
-import { Planner } from "~/types/planner.interface";
+import type { Planner } from "@/types/planner.interface";
 
 const recipeStore = useRecipeStore();
 const plannerStore = usePlannerStore();

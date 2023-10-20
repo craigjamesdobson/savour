@@ -1,6 +1,7 @@
 <template>
   <div class="relative flex bg-slate-950 place-content-center place-items-end">
-    <img
+    <NuxtImg
+      placeholder
       width="2000"
       height="300"
       class="aspect-[2/1] lg:aspect-[4/1] object-cover w-full"

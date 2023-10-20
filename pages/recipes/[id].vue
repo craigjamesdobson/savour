@@ -3,6 +3,21 @@
     <RecipeHeader v-model="headerModel" />
     <div v-if="isEditMode" class="flex flex-col gap-5 my-5">
       <div class="flex flex-col items-start gap-2 py-5">
+        <MultiSelect
+          v-model="activeRecipe.categories"
+          :options="recipeStore.categories"
+          optionLabel="name"
+          placeholder="Select Categories..."
+          display="chip"
+          class="w-full md:w-20rem"
+        >
+          <template #option="slotProps">
+            <div class="flex gap-2 align-items-center">
+              <RecipeCategory :category="slotProps.option"></RecipeCategory>
+              <div>{{ slotProps.option.name }}</div>
+            </div>
+          </template>
+        </MultiSelect>
         <div class="flex-auto mb-2">
           <InputNumber
             v-model="activeRecipe.servings"
@@ -52,6 +67,7 @@
 <script setup>
 import { useRecipeStore } from "@/stores/recipes";
 import Editor from "primevue/editor";
+import MultiSelect from "primevue/MultiSelect";
 import "quill/dist/quill.snow.css";
 
 const recipeStore = useRecipeStore();

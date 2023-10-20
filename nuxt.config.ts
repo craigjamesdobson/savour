@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/supabase",
     '@vite-pwa/nuxt',
+    "@nuxt/image"
   ],
   pwa: {
     manifest: {

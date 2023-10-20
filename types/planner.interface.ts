@@ -1,4 +1,4 @@
-import { Recipe } from "./recipe.interface";
+import type { Recipe } from "./recipe.interface";
 
 interface Planner {
   id: number;

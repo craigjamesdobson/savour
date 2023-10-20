@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { Database } from "~/types/database.types";
-import { Category, Recipe } from "@/types/recipe.interface";
+import type { Database } from "~/types/database.types";
+import type { Category, Recipe } from "@/types/recipe.interface";
 
 const sortRecipeByCategory = (recipes: Recipe[]) => {
   // Create an object to hold categorized recipes
@@ -26,10 +26,19 @@ export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
 
   const recipes: Ref<Recipe[]> = ref([]);
+  const categories = ref([]);
   const cachedRecipes: Ref<Recipe[]> = ref([]);
   const recipesLoaded = ref(false);
 
   const fetchRecipes = async () => {
+    const { data: categoryData } = await supabase.from("categories").select(`
+    id,
+    name,
+    icon
+  `);
+
+    categories.value = categoryData;
+
     const { data, error: selectError } = await supabase.from("recipes").select(`
       id,
       name,
@@ -135,6 +144,7 @@ export const useRecipeStore = defineStore("recipes", () => {
 
   return {
     recipes,
+    categories,
     recipesLoaded,
     fetchRecipes,
     updateRecipeAndCategories,
