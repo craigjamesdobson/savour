@@ -69,6 +69,9 @@ export default defineNuxtConfig({
   },
   primevue: {
     cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
+    components: {
+      exclude: ["Chart"]
+    }
   },
   postcss: {
     plugins: {
