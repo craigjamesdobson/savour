@@ -6,8 +6,9 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@pinia/nuxt",
     "@nuxtjs/supabase",
-    '@vite-pwa/nuxt',
-    "@nuxt/image"
+    "@vite-pwa/nuxt",
+    "@nuxt/image",
+    "nuxt-primevue",
   ],
   pwa: {
     manifest: {
@@ -62,21 +63,23 @@ export default defineNuxtConfig({
   },
   devtools: { enabled: true },
   build: {
-    transpile: ["primevue"],
     rollupOptions: {
-      external: 'NonExistingPath'
-    }
+      external: "NonExistingPath",
+    },
+  },
+  primevue: {
+    cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
   },
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
-     cssnano:
-       process.env.NODE_ENV === 'production'
-         ? { preset: ['default', { discardComments: { removeAll: true } }] }
-         : false, // disable cssnano when not in production
+      cssnano:
+        process.env.NODE_ENV === "production"
+          ? { preset: ["default", { discardComments: { removeAll: true } }] }
+          : false, // disable cssnano when not in production
     },
- },
+  },
   googleFonts: {
     families: {
       Inter: [400, 700],
@@ -84,6 +87,7 @@ export default defineNuxtConfig({
   },
   vue: {
     defineModel: true,
-    propsDestructure: true
-  }
+    propsDestructure: true,
+  },
+  css: ['primevue/resources/themes/lara-light-blue/theme.css']
 });

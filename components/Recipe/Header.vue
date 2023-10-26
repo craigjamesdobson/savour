@@ -4,7 +4,7 @@
       placeholder
       width="2000"
       height="300"
-      class="aspect-[2/1] lg:aspect-[4/1] object-cover w-full"
+      class="aspect-square lg:aspect-[4/1] object-cover w-full"
       :src="modelValue.activeRecipe.header_image"
       alt=""
     />
@@ -45,7 +45,7 @@
         v-if="modelValue.isEditMode"
       >
         <input
-          class="text-4xl font-black tracking-wider text-center text-white bg-transparent"
+          class="text-2xl font-black tracking-wider text-center text-white bg-transparent md:text-4xl"
           v-model="modelValue.activeRecipe.name"
           type="text"
         />
@@ -57,7 +57,7 @@
       </div>
       <h2
         v-else
-        class="flex flex-col p-5 text-4xl font-black tracking-wider text-center text-white"
+        class="flex flex-col p-5 text-2xl font-black tracking-wider text-center text-white md:text-4xl"
       >
         {{ modelValue.activeRecipe.name }}
         <a

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-4xl">Home</h1>
+    <Header heading="Home"></Header>
     <a :href="fileData">Download</a>
   </div>
 </template>

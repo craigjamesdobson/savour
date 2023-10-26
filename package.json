@@ -17,6 +17,7 @@
     "@vite-pwa/nuxt": "^0.1.1",
     "autoprefixer": "^10.4.15",
     "nuxt": "^3.8.0",
+    "nuxt-primevue": "^0.0.3",
     "postcss": "^8.4.29",
     "sass": "^1.68.0"
   },

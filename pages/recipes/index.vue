@@ -1,6 +1,14 @@
 <template>
   <div>
-    <h1 class="mb-5 text-4xl font-black">Recipe Book</h1>
+    <div class="flex items-start justify-between gap-2">
+      <Header heading="Recipe Book"></Header>
+      <button
+        class="w-12 h-12 text-white rounded-full bg-primary"
+        @click="recipeStore.addNewRecipe"
+      >
+        <Icon size="2rem" name="tabler:plus" />
+      </button>
+    </div>
     <div v-for="category in recipeStore.groupRecipesByCategory">
       <h1 class="my-5 text-2xl">{{ category.name }}</h1>
       <div class="grid gap-8 lg:grid-cols-4">
@@ -8,21 +16,21 @@
           <NuxtLink
             :to="`/recipes/${recipe.id}`"
             class="relative flex items-end justify-center border aspect-square"
-            >
-          <NuxtImg
-            class="absolute object-cover w-full h-full"
-            :src="recipe.header_image ?? FALLBACK_IMAGE"
-            alt="main image"
-          />
-          <div
-            class="absolute w-full h-full opacity-50 bg-gradient-to-t from-black/100 to-black/0 z-100"
-          />
-          <h2
-            class="z-10 p-5 font-black tracking-wider text-center text-white text-md md:text-xl"
           >
-            {{ recipe.name }}
-          </h2>
-        </NuxtLink>
+            <NuxtImg
+              class="absolute object-cover w-full h-full"
+              :src="recipe.header_image ?? FALLBACK_IMAGE"
+              alt="main image"
+            />
+            <div
+              class="absolute w-full h-full opacity-50 bg-gradient-to-t from-black/100 to-black/0 z-100"
+            />
+            <h2
+              class="z-10 p-5 text-lg font-black tracking-wider text-center text-white md:text-xl"
+            >
+              {{ recipe.name }}
+            </h2>
+          </NuxtLink>
         </div>
       </div>
     </div>

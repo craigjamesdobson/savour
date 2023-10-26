@@ -1,9 +1,10 @@
 <template>
   <div>
-    <h1 class="mb-5 text-4xl font-black">Meal Planner</h1>
-    <div class="flex flex-col gap-5">
-      <div v-for="(_, index) in plannerStore.planner" class="flex gap-5">
+    <Header heading="Meal Planner"></Header>
+    <div class="flex flex-col">
+      <div v-for="(_, index) in plannerStore.planner">
         <PlannerMeal v-model="plannerStore.planner[index]" />
+        <hr class="my-5">
       </div>
     </div>
   </div>

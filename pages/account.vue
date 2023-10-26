@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex flex-row justify-between">
-      <h1 class="text-4xl">Account</h1>
+      <Header heading="Account"></Header>
       <button class="flex gap-2" @click="handleSignOut">
         <Icon size="1.5rem" name="uil:sign-out-alt" />Sign out
       </button>

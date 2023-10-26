@@ -1,14 +1,7 @@
 <template>
-  <NuxtLink :to="`/recipes/${modelValue.recipe.id}`">
-    <NuxtImg
-      class="w-24 h-24 border rounded-lg"
-      :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE"
-      alt="main image"
-    />
-  </NuxtLink>
-  <div class="flex flex-col gap-2">
-    <div class="flex items-center gap-5">
-      <h2 class="font-bold">{{ modelValue.label }}</h2>
+  <div class="flex flex-col gap-5">
+    <div class="flex items-center justify-between gap-5">
+      <h2 class="text-lg font-bold">{{ modelValue.label }}</h2>
       <div>
         <button v-if="!isEditMode" @click="isEditMode = true">
           <Icon size="1.5rem" name="tabler:edit" />
@@ -18,6 +11,13 @@
         </button>
       </div>
     </div>
+    <NuxtLink class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
+        <NuxtImg
+          class="object-cover border rounded-lg aspect-[4/1] md:aspect-[5/1] w-full"
+          :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE"
+          alt="main image"
+        />
+      </NuxtLink>
     <Dropdown
       v-if="isEditMode"
       v-model="modelValue.recipe"
@@ -28,7 +28,6 @@
       :placeholder="modelValue.recipe.name ?? 'please select a recipe'"
       :filter="true"
       :pt="{
-        root: { class: 'w-full md:w-14rem' },
         input: { class: 'py-2 px-3' },
       }"
     >

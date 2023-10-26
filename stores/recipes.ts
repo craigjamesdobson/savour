@@ -130,6 +130,19 @@ export const useRecipeStore = defineStore("recipes", () => {
     }
   };
 
+  const addNewRecipe = () => {
+    recipes.value.push({
+      id: 0,
+      header_image: "https://savvybites.co.uk/wp-content/uploads/2021/06/Halloumi-Pasta-2-of-6.jpg",
+      ingredients: "",
+      instructions: "",
+      name: "",
+      source: "",
+      servings: 0,
+      categories: [{ id: 11, name: "Unassigned", icon: "IconUnassigned" }],
+    });
+  };
+
   const resetRecipeState = () => {
     recipes.value = cachedRecipes.value;
   };
@@ -147,6 +160,7 @@ export const useRecipeStore = defineStore("recipes", () => {
     categories,
     recipesLoaded,
     fetchRecipes,
+    addNewRecipe,
     updateRecipeAndCategories,
     getRecipeById,
     groupRecipesByCategory,
