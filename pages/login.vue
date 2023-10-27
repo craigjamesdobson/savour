@@ -3,9 +3,6 @@ definePageMeta({
   layout: "login",
 });
 
-import Button from "primevue/button";
-import Toast from "primevue/toast";
-
 const supabase = useSupabaseClient();
 const user = useSupabaseUser();
 import { useToast } from "primevue/usetoast";
@@ -59,13 +56,13 @@ const signInWithOtp = async () => {
       id="username"
       v-model="state.email"
       aria-describedby="email-help"
-      class="text-sm border rounded-md p-2"
+      class="p-2 text-sm border rounded-md"
     />
     <small id="username-help"
       >Fill in your email address and click submit and you will be sent a
       one-time password link to login.</small
     >
-    <Button @click="signInWithOtp" label="Submit" />
+    <button class="p-2 text-white rounded-lg bg-primary" @click="signInWithOtp">Submit</button>
     <Message v-if="errorLog" severity="error">{{ errorLog }}</Message>
   </div>
 </template>

@@ -73,6 +73,7 @@ export default defineNuxtConfig({
       exclude: ["Chart"]
     }
   },
+  css: ["primevue/resources/themes/lara-light-blue/theme.css"],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -92,5 +93,4 @@ export default defineNuxtConfig({
     defineModel: true,
     propsDestructure: true,
   },
-  css: ['primevue/resources/themes/lara-light-blue/theme.css']
 });

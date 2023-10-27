@@ -13,7 +13,7 @@
     </div>
     <NuxtLink class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
         <NuxtImg
-          class="object-cover border rounded-lg aspect-[4/1] md:aspect-[5/1] w-full"
+          class="object-cover border rounded-lg aspect-[3/1] md:aspect-[5/1] w-full"
           :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE"
           alt="main image"
         />

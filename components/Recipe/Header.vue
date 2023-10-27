@@ -12,21 +12,6 @@
       class="absolute w-full h-full opacity-50 bg-gradient-to-t from-black/100 via-black/50 to-black/0 z-100"
     />
     <div
-      v-if="modelValue.isEditMode"
-      class="absolute flex items-center gap-2 top-5 left-5"
-    >
-      <Icon
-        class="p-1 border border-white rounded-sm bg-white/50"
-        size="2rem"
-        name="material-symbols:image-outline"
-      />
-      <input
-        class="p-1 border border-white rounded-md w-80 bg-white/50"
-        v-model="modelValue.activeRecipe.header_image"
-        type="text"
-      />
-    </div>
-    <div
       class="absolute p-2 border border-white rounded-full hover:bg-white bg-white/50 right-5 top-5"
     >
       <button
@@ -39,9 +24,17 @@
         <Icon size="2rem" name="fluent:save-16-regular" />
       </button>
     </div>
-    <div class="absolute z-10 flex flex-row items-center text-white">
+    <div
+      class="absolute z-10 flex flex-col items-center justify-center gap-5 text-white left-5 right-5"
+    >
+      <input
+        v-if="modelValue.isEditMode"
+        class="w-full p-1 border border-white rounded-md md:w-2/3 bg-white/50"
+        v-model="modelValue.activeRecipe.header_image"
+        type="text"
+      />
       <div
-        class="flex flex-col items-center p-1 mb-5 text-center border border-white rounded-md bg-white/25"
+        class="flex flex-col w-full p-1 mb-5 overflow-hidden text-center border border-white rounded-md md:w-2/3 bg-white/25"
         v-if="modelValue.isEditMode"
       >
         <input

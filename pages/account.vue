@@ -6,7 +6,7 @@
         <Icon size="1.5rem" name="uil:sign-out-alt" />Sign out
       </button>
     </div>
-    <div class="my-10">Hi {{ accountStore.user.email }}</div>
+    <div class="my-5">Hi {{ accountStore.user.email }}</div>
   </div>
 </template>
 
