@@ -9,6 +9,7 @@ interface Recipe {
   source: string | null;
   header_image: string | null;
   ingredients: string | null;
+  servings: number | null;
   instructions: string | null;
   categories: Category[];
 }

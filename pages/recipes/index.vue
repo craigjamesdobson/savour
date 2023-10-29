@@ -2,12 +2,13 @@
   <div>
     <div class="flex items-start justify-between gap-2">
       <Header heading="Recipe Book"></Header>
-      <button
-        class="w-12 h-12 text-white rounded-full bg-primary"
-        @click="recipeStore.addNewRecipe"
+      <NuxtLink
+        to="/recipes/new"
+        class="flex items-center justify-center w-12 h-12 text-white rounded-full bg-primary"
+        @click=""
       >
         <Icon size="2rem" name="tabler:plus" />
-      </button>
+      </NuxtLink>
     </div>
     <div v-for="category in recipeStore.groupRecipesByCategory">
       <h1 class="my-5 text-2xl">{{ category.name }}</h1>
