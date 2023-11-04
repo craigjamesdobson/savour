@@ -24,6 +24,7 @@ const sortRecipeByCategory = (recipes: Recipe[]) => {
 
 export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
+  const router = useRouter();
 
   const recipes: Ref<Recipe[]> = ref([]);
   const categories = ref([]);
@@ -48,7 +49,8 @@ export const useRecipeStore = defineStore("recipes", () => {
       instructions, 
       servings,
       categories (id, name, icon)
-    `);
+    `)
+    .is('deleted_at', null)
 
     if (selectError) {
       throw new Error(selectError.message);
@@ -59,6 +61,39 @@ export const useRecipeStore = defineStore("recipes", () => {
     // Create a cached version of the data that can be used for rollbacks
     cachedRecipes.value = data;
     recipesLoaded.value = true;
+  };
+
+  const addNewRecipe = async (recipe: Recipe) => {
+    // Create a new array of data that will be used
+    // to update the database using the reactive state
+    const { id, categories, ...rawRecipeData } = recipe;
+
+    const { data, error: insertError } = await supabase
+      .from("recipes")
+      .insert(rawRecipeData)
+      .select();
+
+    if (insertError) {
+      throw new Error(insertError.message);
+    }
+
+    return data;
+  };
+
+  const updateRecipe = async (recipe: Recipe) => {
+    // Create a new array of data that will be used
+    // to update the database using the reactive state
+    const { categories, ...rawRecipeData } = recipe;
+
+    // Update the database using the new data
+    const { error: updateError } = await supabase
+      .from("recipes")
+      .update(rawRecipeData)
+      .eq("id", recipe.id);
+
+    if (updateError) {
+      throw new Error(updateError.message);
+    }
   };
 
   const updateRecipeCategories = async (recipe: Recipe) => {
@@ -90,58 +125,56 @@ export const useRecipeStore = defineStore("recipes", () => {
     }
   };
 
-  const updateRecipe = async (recipe: Recipe) => {
-    // Create a new array of data that will be used
-    // to update the database using the reactive state
-    const { categories, ...rawRecipeData } = recipe;
+  const addOrUpdateRecipeAndCategories = async (recipe: Recipe) => {
 
-    // Update the database using the new data
-    const { error: updateError } = await supabase
-      .from("recipes")
-      .update(rawRecipeData)
-      .eq("id", recipe.id);
+    // If the recipe ID is 0 then we know it is a new recipe that has the ID of 0
+    if (recipe.id === 0) {
+      try {
+        // Add a new recipe to the db and push a new recipe 
+        // into the state using the id returned from the db
+        const [{ id }] = await addNewRecipe(recipe);
+        const newRecipe = {...recipe, id: id}
+        recipes.value.push(newRecipe)
+        
+        // Use the new recipe data to update the categories
+        await updateRecipeCategories(newRecipe);
 
-    if (updateError) {
-      throw new Error(updateError.message);
+        // Navigate to the newly created recipe
+        router.push(`/recipes/${id}`);
+        
+      } catch (err) {
+        // If there was an error updating the database then reset the state
+        resetRecipeState();
+        throw new Error(err.message);
+      }
+    } else {  
+      try {
+        let activeRecipeID = recipes.value.findIndex(x => x.id === recipe.id);
+
+        if (activeRecipeID !== undefined) {
+          recipes.value[activeRecipeID] = recipe;
+        }
+        // Use promise all to make sure all aspects of the recipe have been updated
+        await Promise.all([
+          updateRecipe(recipe),
+          updateRecipeCategories(recipe),
+        ]);
+      } catch (error) {
+        // If there was an error updating the database then reset the state
+        resetRecipeState();
+        throw new Error("Recipe failed to update");
+      } finally {
+        // Recache the updated recipe state
+        cachedRecipes.value = recipes.value;
+      }
     }
   };
 
-  const updateRecipeAndCategories = async (recipeID: number) => {
-    // Using optimisitic UI patterns we will update the state first to keep
-    // things fast and fluid and if the database update fails we will rollback
-
-    // Find the active recipe
-    const activeRecipe = recipes.value.find((x) => x.id === recipeID);
-
-    if (!activeRecipe) {
-      throw new Error("Error finding recipe");
-    }
-
-    try {
-      // Use promise all to make sure all aspects of the recipe have been updated
-      await Promise.all([
-        updateRecipe(activeRecipe),
-        updateRecipeCategories(activeRecipe),
-      ]);
-    } catch (error) {
-      // If there was an error updating the database then reset the state
-      resetRecipeState();
-      throw new Error("Recipe failed to update");
-    }
-  };
-
-  const addNewRecipe = () => {
-    recipes.value.push({
-      id: 0,
-      header_image: "https://savvybites.co.uk/wp-content/uploads/2021/06/Halloumi-Pasta-2-of-6.jpg",
-      ingredients: "",
-      instructions: "",
-      name: "",
-      source: "",
-      servings: 0,
-      categories: [{ id: 11, name: "Unassigned", icon: "IconUnassigned" }],
-    });
-  };
+  const deleteRecipe = (recipe: Recipe) => {
+    recipes.value = recipes.value.filter(x => x.id !== recipe.id);
+    updateRecipe({...recipe, deleted_at: (new Date()).toISOString()})
+    router.push(`/recipes`);
+  }
 
   const resetRecipeState = () => {
     recipes.value = cachedRecipes.value;
@@ -161,7 +194,8 @@ export const useRecipeStore = defineStore("recipes", () => {
     recipesLoaded,
     fetchRecipes,
     addNewRecipe,
-    updateRecipeAndCategories,
+    addOrUpdateRecipeAndCategories,
+    deleteRecipe,
     getRecipeById,
     groupRecipesByCategory,
   };

@@ -19,7 +19,7 @@ const route = useRoute();
 const currentRoute = +route.params.id;
 
 const isEditMode = ref(false);
-const activeRecipe = ref(recipeStore.getRecipeById(currentRoute));
+const activeRecipe = ref({ ...recipeStore.getRecipeById(currentRoute)});
 
 const headerModel = reactive({
   activeRecipe,

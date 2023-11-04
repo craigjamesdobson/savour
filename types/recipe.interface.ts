@@ -12,6 +12,7 @@ interface Recipe {
   servings: number | null;
   instructions: string | null;
   categories: Category[];
+  deleted_at: string | null;
 }
 
 export type { Recipe, Category };

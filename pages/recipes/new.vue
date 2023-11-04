@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="templateRecipe">
     <RecipeHeader v-model="headerModel" />
     <RecipeSectionEdit
       v-if="isEditMode"
@@ -14,18 +14,11 @@
 </template>
 
 <script setup lang="ts">
+import { DEFAULT_RECIPE_DATA } from "~/helpers/constants";
 const isEditMode = true;
-const templateRecipe = reactive({
-  id: 0,
-  header_image:
-    "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&q=80&w=1500&h=1500",
-  ingredients: "<h2>Add Ingredients</h2>",
-  instructions: "<h2>Add instructions</h2>",
-  name: "Recipe Name",
-  source: "Recipe Source",
-  servings: 1,
-  categories: [{ id: 11, name: "Unassigned", icon: "IconUnassigned" }],
-});
+
+const templateRecipe = { ...DEFAULT_RECIPE_DATA };
+
 const headerModel = reactive({
   activeRecipe: templateRecipe,
   isEditMode: true,

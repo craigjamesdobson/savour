@@ -10,6 +10,11 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "nuxt-primevue",
   ],
+  content: [
+    "./index.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}"
+],
   pwa: {
     manifest: {
       name: "Savour",
@@ -69,11 +74,19 @@ export default defineNuxtConfig({
   },
   primevue: {
     cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
+    importPT: { as: 'Tailwind', from: 'primevue/passthrough/tailwind' },
+    options: {
+      ripple: true,
+      inputStyle: 'filled'
+    },
     components: {
-      exclude: ["Chart"]
-    }
+      exclude: ["Chart"],
+    },
   },
-  css: ["primevue/resources/themes/lara-light-blue/theme.css"],
+  css: [
+    "primevue/resources/themes/lara-light-teal/theme.css",
+    "primeicons/primeicons.css",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -92,5 +105,5 @@ export default defineNuxtConfig({
   vue: {
     defineModel: true,
     propsDestructure: true,
-  },
+  }
 });
