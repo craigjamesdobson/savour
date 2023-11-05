@@ -10,13 +10,24 @@
         <Icon size="2rem" name="tabler:plus" />
       </NuxtLink>
     </div>
+    <div class="flex flex-wrap gap-3 card justify-content-center">
+        <span class="p-input-icon-left">
+            <i class="pi pi-search" />
+            <InputText v-model="searchQuery" placeholder="Search" />
+        </span>
+    </div>
     <div v-for="category in recipeStore.groupRecipesByCategory">
-      <h1 class="my-5 text-2xl">{{ category.name }}</h1>
+      <div class="flex flex-row items-center gap-5">
+        <RecipeCategory
+        :category="category"
+      ></RecipeCategory>
+        <h1 class="my-5 text-2xl">{{ category.name }}</h1>
+      </div>
       <div class="grid gap-8 lg:grid-cols-4">
         <div v-for="recipe in category.recipes">
           <NuxtLink
             :to="`/recipes/${recipe.id}`"
-            class="relative flex items-end justify-center border aspect-square"
+            class="flex justify-start items-end relative border rounded-md aspect-[2/1] overflow-hidden"
           >
             <NuxtImg
               class="absolute object-cover w-full h-full"
@@ -24,10 +35,10 @@
               alt="main image"
             />
             <div
-              class="absolute w-full h-full opacity-50 bg-gradient-to-t from-black/100 to-black/0 z-100"
+              class="absolute w-full h-full bg-gradient-to-t from-black/75 to-black/0 z-100"
             />
             <h2
-              class="z-10 p-5 text-lg font-black tracking-wider text-center text-white md:text-xl"
+              class="z-10 p-5 font-black tracking-wider text-white text-md md:text-xl"
             >
               {{ recipe.name }}
             </h2>
@@ -42,6 +53,7 @@
 import { useRecipeStore } from "@/stores/recipes";
 import { FALLBACK_IMAGE } from "~/helpers/constants";
 const recipeStore = useRecipeStore();
+const searchQuery = computed(() => "");
 </script>
 
 <style scoped></style>

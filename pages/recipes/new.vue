@@ -17,7 +17,7 @@
 import { DEFAULT_RECIPE_DATA } from "~/helpers/constants";
 const isEditMode = true;
 
-const templateRecipe = { ...DEFAULT_RECIPE_DATA };
+const templateRecipe = ref({ ...DEFAULT_RECIPE_DATA });
 
 const headerModel = reactive({
   activeRecipe: templateRecipe,
