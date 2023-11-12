@@ -21,7 +21,7 @@
     <Dropdown
       v-if="isEditMode"
       v-model="modelValue.recipe"
-      :options="recipeStore.groupRecipesByCategory"
+      :options="recipeStore.groupRecipesByCategory(recipeStore.recipes)"
       optionLabel="name"
       optionGroupLabel="name"
       optionGroupChildren="recipes"
