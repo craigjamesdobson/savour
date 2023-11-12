@@ -13,10 +13,10 @@
     <div class="flex flex-wrap gap-3 card justify-content-center">
         <span class="p-input-icon-left">
             <i class="pi pi-search" />
-            <InputText v-model="searchQuery" placeholder="Search" />
+            <InputText v-model.lazy="searchQuery" placeholder="Search" />
         </span>
     </div>
-    <div v-for="category in recipeStore.groupRecipesByCategory">
+    <div v-for="category in recipeStore.groupRecipesByCategory(filteredRecipes)">
       <div class="flex flex-row items-center gap-5">
         <RecipeCategory
         :category="category"
@@ -53,7 +53,8 @@
 import { useRecipeStore } from "@/stores/recipes";
 import { FALLBACK_IMAGE } from "~/helpers/constants";
 const recipeStore = useRecipeStore();
-const searchQuery = computed(() => "");
+const searchQuery = ref("");
+const filteredRecipes = computed(() => recipeStore.getFilteredRecipes(searchQuery.value));
 </script>
 
 <style scoped></style>

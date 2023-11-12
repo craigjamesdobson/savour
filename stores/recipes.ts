@@ -40,7 +40,10 @@ export const useRecipeStore = defineStore("recipes", () => {
 
     categories.value = categoryData;
 
-    const { data, error: selectError } = await supabase.from("recipes").select(`
+    const { data, error: selectError } = await supabase
+      .from("recipes")
+      .select(
+        `
       id,
       name,
       source, 
@@ -49,8 +52,9 @@ export const useRecipeStore = defineStore("recipes", () => {
       instructions, 
       servings,
       categories (id, name, icon)
-    `)
-    .is('deleted_at', null)
+    `
+      )
+      .is("deleted_at", null);
 
     if (selectError) {
       throw new Error(selectError.message);
@@ -126,30 +130,28 @@ export const useRecipeStore = defineStore("recipes", () => {
   };
 
   const addOrUpdateRecipeAndCategories = async (recipe: Recipe) => {
-
     // If the recipe ID is 0 then we know it is a new recipe that has the ID of 0
     if (recipe.id === 0) {
       try {
-        // Add a new recipe to the db and push a new recipe 
+        // Add a new recipe to the db and push a new recipe
         // into the state using the id returned from the db
         const [{ id }] = await addNewRecipe(recipe);
-        const newRecipe = {...recipe, id: id}
-        recipes.value.push(newRecipe)
-        
+        const newRecipe = { ...recipe, id: id };
+        recipes.value.push(newRecipe);
+
         // Use the new recipe data to update the categories
         await updateRecipeCategories(newRecipe);
 
         // Navigate to the newly created recipe
         router.push(`/recipes/${id}`);
-        
       } catch (err) {
         // If there was an error updating the database then reset the state
         resetRecipeState();
         throw new Error(err.message);
       }
-    } else {  
+    } else {
       try {
-        let activeRecipeID = recipes.value.findIndex(x => x.id === recipe.id);
+        let activeRecipeID = recipes.value.findIndex((x) => x.id === recipe.id);
 
         if (activeRecipeID !== undefined) {
           recipes.value[activeRecipeID] = recipe;
@@ -171,17 +173,24 @@ export const useRecipeStore = defineStore("recipes", () => {
   };
 
   const deleteRecipe = (recipe: Recipe) => {
-    recipes.value = recipes.value.filter(x => x.id !== recipe.id);
-    updateRecipe({...recipe, deleted_at: (new Date()).toISOString()})
+    recipes.value = recipes.value.filter((x) => x.id !== recipe.id);
+    updateRecipe({ ...recipe, deleted_at: new Date().toISOString() });
     router.push(`/recipes`);
-  }
+  };
 
   const resetRecipeState = () => {
     recipes.value = cachedRecipes.value;
   };
 
-  const groupRecipesByCategory = computed(() =>
-    sortRecipeByCategory(recipes.value)
+  const groupRecipesByCategory = computed(
+    () => (recipes: Recipe[]) => sortRecipeByCategory(recipes)
+  );
+
+  const getFilteredRecipes = computed(
+    () => (filterTerm: string) =>
+      recipes.value.filter((recipe) =>
+        recipe.name?.toLowerCase().includes(filterTerm.toLocaleLowerCase())
+      )
   );
 
   const getRecipeById = computed(
@@ -198,5 +207,6 @@ export const useRecipeStore = defineStore("recipes", () => {
     deleteRecipe,
     getRecipeById,
     groupRecipesByCategory,
+    getFilteredRecipes,
   };
 });
