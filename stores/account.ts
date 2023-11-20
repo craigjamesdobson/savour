@@ -8,8 +8,23 @@ export const useAccountStore = defineStore("account", () => {
   const dataLoaded: Ref<boolean> = ref(false);
 
   const fetchUser = async () => {
-    const { data } = await supabase.auth.getUser()
-    user.value = data.user
+    const { data: auth } = await supabase.auth.getUser();
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select(
+        `
+          first_name,
+          last_name,
+          user_group,
+          is_admin
+        `
+      )
+      .eq("id", auth.user?.id)
+      .maybeSingle();
+
+    user.value = profile;
+    user.value.email = auth.user?.email
+    dataLoaded.value = true;
   };
 
   const isLoaded = computed(() => dataLoaded.value);

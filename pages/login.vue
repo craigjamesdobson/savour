@@ -20,16 +20,15 @@ watch(
 
 const state = ref({
   email: "",
+  password: "",
 });
 
 const errorLog = ref(null);
 
-const signInWithOtp = async () => {
-  const { error, data } = await supabase.auth.signInWithOtp({
+const signInWithUserAndPassword = async () => {
+  const { data, error } = await supabase.auth.signInWithPassword({
     email: state.value.email,
-    options: {
-      emailRedirectTo: `${process.env.SITE_URL}/confirm`,
-    },
+    password: state.value.password,
   });
   if (error) {
     toast.add({
@@ -58,11 +57,19 @@ const signInWithOtp = async () => {
       aria-describedby="email-help"
       class="p-2 text-sm border rounded-md"
     />
-    <small id="username-help"
-      >Fill in your email address and click submit and you will be sent a
-      one-time password link to login.</small
+    <input
+      type="password"
+      id="password"
+      v-model="state.password"
+      class="p-2 text-sm border rounded-md"
+    />
+    <small id="username-help">Fill in your details and click submit.</small>
+    <button
+      class="p-2 text-white rounded-lg bg-primary"
+      @click="signInWithUserAndPassword"
     >
-    <button class="p-2 text-white rounded-lg bg-primary" @click="signInWithOtp">Submit</button>
+      Submit
+    </button>
     <Message v-if="errorLog" severity="error">{{ errorLog }}</Message>
   </div>
 </template>

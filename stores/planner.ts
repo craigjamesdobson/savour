@@ -1,23 +1,25 @@
 import { defineStore } from "pinia";
-import { Database } from "~/types/database.types";
-import { Planner } from "~/types/planner.interface";
+import type { Planner } from "~/types/planner.interface";
+import { useAccountStore } from "./account";
 
 export const usePlannerStore = defineStore("planner", () => {
-  const supabase = useSupabaseClient<Database>();
+  const supabase = useSupabaseClient();
+  const accountStore = useAccountStore();
 
-  const planner: Ref<Planner[]> = ref([]);
+  const planner: Ref<Planner[] | null> = ref(null);
 
   const fetchMealPlan = async () => {
     let { data, error } = await supabase
       .from("planner")
       .select(
         `
-      id,
-      label,
-      recipe:recipes (id, name, header_image, categories (name, icon))
-    `
+        id,
+        label,
+        recipe:recipes (id, name, header_image, categories (name, icon))
+      `
       )
-      .order("id");
+      .eq("user_group", accountStore.user.user_group)
+      .order("day_id");
 
     if (error) {
       throw error;
@@ -29,8 +31,8 @@ export const usePlannerStore = defineStore("planner", () => {
     mealPlanID: number,
     updatedRecipeID: number
   ) => {
-    const supabase = useSupabaseClient<Database>();
-    const { data, error } = await supabase
+    const supabase = useSupabaseClient();
+    await supabase
       .from("planner")
       .update({ recipe_id: updatedRecipeID })
       .eq("id", mealPlanID)

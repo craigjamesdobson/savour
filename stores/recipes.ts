@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { Database } from "~/types/database.types";
 import type { Category, Recipe } from "@/types/recipe.interface";
+import { useAccountStore } from "./account";
 
 const sortRecipeByCategory = (recipes: Recipe[]) => {
   // Create an object to hold categorized recipes
@@ -25,6 +26,7 @@ const sortRecipeByCategory = (recipes: Recipe[]) => {
 export const useRecipeStore = defineStore("recipes", () => {
   const supabase = useSupabaseClient<Database>();
   const router = useRouter();
+  const accountStore = useAccountStore();
 
   const recipes: Ref<Recipe[]> = ref([]);
   const categories = ref([]);
@@ -51,9 +53,11 @@ export const useRecipeStore = defineStore("recipes", () => {
       ingredients,
       instructions, 
       servings,
+      user_group,
       categories (id, name, icon)
     `
       )
+      .eq("user_group", accountStore.user.user_group)
       .is("deleted_at", null);
 
     if (selectError) {
@@ -74,7 +78,7 @@ export const useRecipeStore = defineStore("recipes", () => {
 
     const { data, error: insertError } = await supabase
       .from("recipes")
-      .insert(rawRecipeData)
+      .insert({ ...rawRecipeData, user_group: accountStore.user.user_group })
       .select();
 
     if (insertError) {
