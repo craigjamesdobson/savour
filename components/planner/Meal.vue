@@ -12,44 +12,37 @@
       </div>
     </div>
     <NuxtLink class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
-        <NuxtImg
-          class="object-cover border rounded-lg aspect-[3/1] md:aspect-[5/1] w-full"
-          :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE"
-          alt="main image"
-        />
-      </NuxtLink>
-    <Dropdown
-      v-if="isEditMode"
-      v-model="modelValue.recipe"
-      :options="recipeStore.groupRecipesByCategory(recipeStore.recipes)"
-      optionLabel="name"
-      optionGroupLabel="name"
-      optionGroupChildren="recipes"
-      :placeholder="modelValue.recipe.name ?? 'please select a recipe'"
-      :filter="true"
-      :pt="{
-        input: { class: 'py-2 px-3' },
-      }"
-    >
-      <template #optiongroup="slotProps">
-        <div class="flex items-center">
-          <Icon
-            class="mr-2 text-primary"
-            size="1.3rem"
-            :name="slotProps.option.icon"
-          />
-          <div>{{ slotProps.option.name }}</div>
-        </div>
-      </template>
-    </Dropdown>
-    <NuxtLink v-else :to="`/recipes/${modelValue.recipe.id}`">{{
-      modelValue.recipe.name
-    }}</NuxtLink>
+      <NuxtImg class="object-cover border rounded-lg aspect-[3/1] md:aspect-[5/1] w-full"
+        :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE" alt="main image" />
+    </NuxtLink>
+    <div class="flex gap-5">
+      <div class="w-1/2 lg:w-3/4">
+        <Dropdown class="w-full" v-if="isEditMode" v-model="modelValue.recipe"
+          :options="recipeStore.groupRecipesByCategory(recipeStore.recipes)" optionLabel="name" optionGroupLabel="name"
+          optionGroupChildren="recipes" :placeholder="modelValue.recipe.name ?? 'please select a recipe'" :filter="true"
+          :pt="{
+            input: { class: 'py-2 px-3' },
+          }">
+          <template #optiongroup="slotProps">
+            <div class="flex items-center">
+              <Icon class="mr-2 text-primary" size="1.3rem" :name="slotProps.option.icon" />
+              <div>{{ slotProps.option.name }}</div>
+            </div>
+          </template>
+        </Dropdown>
+        <NuxtLink v-else :to="`/recipes/${modelValue.recipe.id}`">{{
+          modelValue.recipe.name
+        }}</NuxtLink>
+      </div>
+      <div class="flex flex-col items-end gap-1 text-xs ml-auto text-right">
+        <span>
+          Updated on {{ new Date(modelValue.updated_at).toLocaleDateString('en-GB') }}
+        </span>
+        <span v-if="modelValue.user">{{ modelValue.user.first_name }} {{ modelValue.user.last_name }}</span>
+      </div>
+    </div>
     <div class="flex gap-2">
-      <RecipeCategory
-        v-for="category in modelValue.recipe.categories"
-        :category="category"
-      ></RecipeCategory>
+      <RecipeCategory v-for="category in modelValue.recipe.categories" :category="category"></RecipeCategory>
     </div>
   </div>
 </template>

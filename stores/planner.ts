@@ -15,7 +15,9 @@ export const usePlannerStore = defineStore("planner", () => {
         `
         id,
         label,
-        recipe:recipes (id, name, header_image, categories (name, icon))
+        updated_at,
+        recipe:recipes (id, name, header_image, categories (name, icon)),
+        user:updated_by (first_name, last_name)
       `
       )
       .eq("user_group", accountStore.user.user_group)
@@ -34,9 +36,11 @@ export const usePlannerStore = defineStore("planner", () => {
     const supabase = useSupabaseClient();
     await supabase
       .from("planner")
-      .update({ recipe_id: updatedRecipeID })
+      .update({ recipe_id: updatedRecipeID, updated_by: accountStore.user.id })
       .eq("id", mealPlanID)
       .select();
+
+      planner.value!.filter(x => x.id === mealPlanID)[0].user = accountStore.user;
   };
 
   return {

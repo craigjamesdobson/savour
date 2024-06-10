@@ -13,6 +13,7 @@ export const useAccountStore = defineStore("account", () => {
       .from("profiles")
       .select(
         `
+          id,
           first_name,
           last_name,
           user_group,
