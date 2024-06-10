@@ -39,6 +39,8 @@ export const usePlannerStore = defineStore("planner", () => {
       .update({ recipe_id: updatedRecipeID, updated_by: accountStore.user.id })
       .eq("id", mealPlanID)
       .select();
+
+      planner.value!.filter(x => x.id === mealPlanID)[0].user = accountStore.user;
   };
 
   return {
