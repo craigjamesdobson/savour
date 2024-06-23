@@ -1,11 +1,7 @@
 <template>
   <div>
-    <RecipeHeader v-model="headerModel" />
-    <RecipeSectionEdit
-      v-if="isEditMode"
-      :is-edit-mode="isEditMode"
-      v-model="activeRecipe"
-    ></RecipeSectionEdit>
+    <RecipeHeader :active-recipe="activeRecipe" v-model:is-edit-mode="isEditMode" />
+    <RecipeSectionEdit v-if="isEditMode" :is-edit-mode="isEditMode" v-model="activeRecipe"></RecipeSectionEdit>
     <RecipeSectionRead v-else :active-recipe="activeRecipe"></RecipeSectionRead>
   </div>
 </template>
@@ -16,14 +12,10 @@ import { useRecipeStore } from "@/stores/recipes";
 const recipeStore = useRecipeStore();
 
 const route = useRoute();
-const currentRoute = +route.params.id;
 
 const isEditMode = ref(false);
-const activeRecipe = ref({ ...recipeStore.getRecipeById(currentRoute)});
-
-const headerModel = reactive({
-  activeRecipe,
-  isEditMode,
+const activeRecipe = computed(() => {
+  return { ...recipeStore.getRecipeById(route.params.id) };
 });
 </script>
 
