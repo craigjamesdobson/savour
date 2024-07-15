@@ -31,7 +31,7 @@ export const usePlannerStore = defineStore("planner", () => {
 
   const updateMealPlan = async (
     mealPlanID: number,
-    updatedRecipeID: number
+    updatedRecipeID: number | null
   ) => {
     const supabase = useSupabaseClient();
     await supabase
@@ -40,7 +40,7 @@ export const usePlannerStore = defineStore("planner", () => {
       .eq("id", mealPlanID)
       .select();
 
-      planner.value!.filter(x => x.id === mealPlanID)[0].user = accountStore.user;
+    planner.value!.filter(x => x.id === mealPlanID)[0].user = accountStore.user;
   };
 
   return {
