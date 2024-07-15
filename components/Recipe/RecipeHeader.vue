@@ -8,7 +8,7 @@
   ></ConfirmPopup>
   <div class="relative flex bg-slate-950 place-content-center place-items-end">
     <NuxtImg
-      v-if="activeRecipe.header_image"
+      v-if="props.activeRecipe.header_image"
       placeholder
       width="2000"
       height="300"
