@@ -69,6 +69,7 @@
       >
         {{ props.activeRecipe.name }}
         <a
+          v-if="props.activeRecipe.source"
           class="py-1 text-sm font-light tracking-normal"
           target="_blank"
           :href="props.activeRecipe.source"
@@ -114,7 +115,7 @@ const handleRecipeDelete = async (event: Event) => {
     header: "Delete Confirmation",
     icon: "pi pi-info-circle",
     accept: () => {
-      recipeStore.deleteRecipe(activeRecipe);
+      recipeStore.deleteRecipe(props.activeRecipe);
     }
   });
 };
