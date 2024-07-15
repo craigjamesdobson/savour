@@ -8,7 +8,7 @@
   ></ConfirmPopup>
   <div class="relative flex bg-slate-950 place-content-center place-items-end">
     <NuxtImg
-      v-if="activeRecipe.header_image"
+      v-if="props.activeRecipe.header_image"
       placeholder
       width="2000"
       height="300"
@@ -69,6 +69,7 @@
       >
         {{ props.activeRecipe.name }}
         <a
+          v-if="props.activeRecipe.source"
           class="py-1 text-sm font-light tracking-normal"
           target="_blank"
           :href="props.activeRecipe.source"
@@ -114,7 +115,7 @@ const handleRecipeDelete = async (event: Event) => {
     header: "Delete Confirmation",
     icon: "pi pi-info-circle",
     accept: () => {
-      recipeStore.deleteRecipe(activeRecipe);
+      recipeStore.deleteRecipe(props.activeRecipe);
     }
   });
 };

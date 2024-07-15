@@ -2,24 +2,27 @@
   <div class="flex flex-col gap-5">
     <div class="flex items-center justify-between gap-5">
       <h2 class="text-lg font-bold">{{ modelValue.label }}</h2>
-      <div>
+      <div class="flex gap-2.5">
         <button v-if="!isEditMode" @click="isEditMode = true">
           <Icon size="1.5rem" name="tabler:edit" />
         </button>
         <button v-else @click="handleMealPlanUpdate">
           <Icon size="1.5rem" name="fluent:save-16-regular" />
         </button>
+        <button @click="handleMealRemoval">
+        <Icon size="1.5rem" name="radix-icons:cross-2" />
+      </button>
       </div>
     </div>
-    <NuxtLink class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
+    <NuxtLink v-if="modelValue.recipe" class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
       <NuxtImg class="object-cover border rounded-lg aspect-[3/1] md:aspect-[5/1] w-full"
         :src="modelValue.recipe.header_image ?? FALLBACK_IMAGE" alt="main image" />
     </NuxtLink>
     <div class="flex gap-5">
       <div class="w-1/2 lg:w-3/4">
-        <Dropdown class="w-full" v-if="isEditMode" v-model="modelValue.recipe"
+        <Dropdown class="w-full" v-if="isEditMode || modelValue.recipe === null" v-model="modelValue.recipe"
           :options="recipeStore.groupRecipesByCategory(recipeStore.recipes)" optionLabel="name" optionGroupLabel="name"
-          optionGroupChildren="recipes" :placeholder="modelValue.recipe.name ?? 'please select a recipe'" :filter="true"
+          optionGroupChildren="recipes" :placeholder="modelValue.recipe?.name ?? 'please select a recipe'" :filter="true"
           :pt="{
             input: { class: 'py-2 px-3' },
           }">
@@ -42,7 +45,7 @@
       </div>
     </div>
     <div class="flex gap-2">
-      <RecipeCategory v-for="category in modelValue.recipe.categories" :category="category"></RecipeCategory>
+      <RecipeCategory v-if="modelValue.recipe" v-for="category in modelValue.recipe.categories" :category="category"></RecipeCategory>
     </div>
   </div>
 </template>
@@ -58,7 +61,14 @@ const recipeStore = useRecipeStore();
 const plannerStore = usePlannerStore();
 const modelValue: Ref<Planner | undefined> = defineModel();
 
-const isEditMode = ref(false);
+const isEditMode = ref(modelValue.value.recipe ? false : true);
+
+const handleMealRemoval = () => {
+  if (!modelValue.value) throw new Error("Selected recipe does not exist");
+  plannerStore.updateMealPlan(modelValue.value.id, null);
+  modelValue.value.recipe = null;
+  isEditMode.value = false;
+};
 
 const handleMealPlanUpdate = () => {
   if (!modelValue.value) throw new Error("Selected recipe does not exist");
