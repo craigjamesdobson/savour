@@ -29,7 +29,7 @@
             :to="`/recipes/${recipe.id}`"
             class="flex justify-start items-end relative border rounded-md aspect-[2/1] overflow-hidden"
           >
-            <NuxtImg
+            <img
               class="absolute object-cover w-full h-full"
               :src="recipe.header_image ?? FALLBACK_IMAGE"
               alt="main image"
