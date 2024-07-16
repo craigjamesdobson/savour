@@ -1,8 +1,8 @@
 <template>
   <div>
-    <RecipeHeader :active-recipe="activeRecipe" v-model:is-edit-mode="isEditMode" />
-    <RecipeSectionEdit v-if="isEditMode" :is-edit-mode="isEditMode" v-model="activeRecipe"></RecipeSectionEdit>
-    <RecipeSectionRead v-else :active-recipe="activeRecipe"></RecipeSectionRead>
+    <RecipeHeader v-if="activeRecipe" :active-recipe="activeRecipe" v-model:is-edit-mode="isEditMode" />
+    <RecipeSectionEdit v-if="isEditMode" :is-edit-mode="isEditMode" v-model:recipe="activeRecipe"></RecipeSectionEdit>
+    <RecipeSectionRead v-else-if="activeRecipe" :active-recipe="activeRecipe"></RecipeSectionRead>
   </div>
 </template>
 
@@ -14,9 +14,9 @@ const recipeStore = useRecipeStore();
 const route = useRoute();
 
 const isEditMode = ref(false);
-const activeRecipe = computed(() => {
-  return { ...recipeStore.getRecipeById(route.params.id) };
-});
+const activeRecipe = computed(() =>
+  recipeStore.getRecipeById(route.params.id)
+);
 </script>
 
 <style scoped></style>

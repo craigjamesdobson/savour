@@ -2,7 +2,7 @@
     <div class="flex flex-col gap-5 my-5">
       <div class="flex flex-col items-start gap-5 py-5">
         <MultiSelect
-          v-model="modelValue.categories"
+          v-model="recipe.categories"
           :options="recipeStore.categories"
           optionLabel="name"
           placeholder="Select Categories..."
@@ -18,7 +18,7 @@
         </MultiSelect>
         <div class="flex-auto mb-2">
           <InputNumber
-            v-model="modelValue.servings"
+            v-model="recipe.servings"
             prefix="Serves "
             showButtons
             buttonLayout="horizontal"
@@ -33,15 +33,15 @@
         </div>
         <div class="flex justify-start gap-2">
           <Icon
-            v-for="i in modelValue.servings"
+            v-for="i in recipe.servings"
             size="1.5rem"
             name="codicon:account"
           />
         </div>
       </div>
-      <Editor v-model="modelValue.ingredients" />
+      <Editor v-model="recipe.ingredients" />
       <hr />
-      <Editor v-model="modelValue.instructions" />
+      <Editor v-model="recipe.instructions" />
     </div>
 </template>
 
@@ -50,10 +50,6 @@ import { useRecipeStore } from "@/stores/recipes";
 import type { Recipe } from '~/types/recipe.interface';
 
 const recipeStore = useRecipeStore();
-const modelValue: Ref<Recipe | undefined> = defineModel();
-
-defineProps<{
-  isEditMode: Boolean;
-}>();
+const recipe: Ref<Recipe | undefined> = defineModel('recipe');
 
 </script>
