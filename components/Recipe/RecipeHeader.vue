@@ -7,9 +7,8 @@
     }"
   ></ConfirmPopup>
   <div class="relative flex bg-slate-950 place-content-center place-items-end">
-    <NuxtImg
+    <img
       v-if="props.activeRecipe.header_image"
-      placeholder
       width="2000"
       height="300"
       class="aspect-square lg:aspect-[4/1] object-cover w-full"

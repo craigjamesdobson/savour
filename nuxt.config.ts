@@ -7,7 +7,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/supabase",
     "@vite-pwa/nuxt",
-    "@nuxt/image",
     "nuxt-primevue",
   ],
   content: [
@@ -101,9 +100,5 @@ export default defineNuxtConfig({
     families: {
       Inter: [400, 700],
     },
-  },
-  vue: {
-    defineModel: true,
-    propsDestructure: true,
   }
 });
