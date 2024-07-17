@@ -1,4 +1,26 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+import { definePreset } from '@primevue/themes';
+import Aura from '@primevue/themes/aura';
+
+const AuraCustom = definePreset(Aura, {
+  semantic: {
+      primary: {
+          50: '{blue.50}',
+          100: '{blue.100}',
+          200: '{blue.200}',
+          300: '{blue.300}',
+          400: '{blue.400}',
+          500: '{blue.500}',
+          600: '{blue.600}',
+          700: '{blue.700}',
+          800: '{blue.800}',
+          900: '{blue.900}',
+          950: '{blue.950}'
+      }
+  }
+});
+
 export default defineNuxtConfig({
   modules: [
     "@nuxtjs/tailwindcss",
@@ -7,13 +29,27 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxtjs/supabase",
     "@vite-pwa/nuxt",
-    "nuxt-primevue",
+    '@primevue/nuxt-module'
   ],
+  primevue: {
+    options: {
+      theme: {
+        preset: AuraCustom,
+        options: {
+            prefix: 'p',
+            darkModeSelector: '.dark-mode',
+            cssLayer: {
+              name: 'primevue',
+              order: 'tailwind-base, primevue, tailwind-utilities'
+          },
+        }
+    }
+    }
+  },
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
-    "./node_modules/primevue/**/*.{vue,js,ts,jsx,tsx}"
-],
+    "./src/**/*.{vue,js,ts,jsx,tsx}"
+  ],
   pwa: {
     manifest: {
       name: "Savour",
@@ -71,20 +107,8 @@ export default defineNuxtConfig({
       external: "NonExistingPath",
     },
   },
-  primevue: {
-    cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
-    importPT: { as: 'Tailwind', from: 'primevue/passthrough/tailwind' },
-    options: {
-      ripple: true,
-      inputStyle: 'filled'
-    },
-    components: {
-      exclude: ["Chart"],
-    },
-  },
   css: [
-    "primevue/resources/themes/aura-light-blue/theme.css",
-    "primeicons/primeicons.css",
+    "primeicons/primeicons.css"
   ],
   postcss: {
     plugins: {

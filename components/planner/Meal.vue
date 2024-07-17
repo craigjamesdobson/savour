@@ -3,15 +3,10 @@
     <div class="flex items-center justify-between gap-5">
       <h2 class="text-lg font-bold">{{ modelValue.label }}</h2>
       <div class="flex gap-2.5">
-        <button v-if="!isEditMode" @click="isEditMode = true">
-          <Icon size="1.5rem" name="tabler:edit" />
-        </button>
-        <button v-else @click="handleMealPlanUpdate">
-          <Icon size="1.5rem" name="fluent:save-16-regular" />
-        </button>
-        <button @click="handleMealRemoval">
-        <Icon size="1.5rem" name="radix-icons:cross-2" />
-      </button>
+        <Button icon="pi pi-pencil" outlined rounded aria-label="Edit" v-if="!isEditMode"
+          @click="isEditMode = true" />
+        <Button icon="pi pi-save" outlined rounded aria-label="Save" v-else @click="handleMealPlanUpdate"/>
+        <Button icon="pi pi-times" @click="handleMealRemoval" rounded outlined severity="danger" aria-label="Remove" />
       </div>
     </div>
     <NuxtLink v-if="modelValue.recipe" class="shrink-0" :to="`/recipes/${modelValue.recipe.id}`">
@@ -22,8 +17,8 @@
       <div class="w-1/2 lg:w-3/4">
         <Dropdown class="w-full" v-if="isEditMode || modelValue.recipe === null" v-model="modelValue.recipe"
           :options="recipeStore.groupRecipesByCategory(recipeStore.recipes)" optionLabel="name" optionGroupLabel="name"
-          optionGroupChildren="recipes" :placeholder="modelValue.recipe?.name ?? 'please select a recipe'" :filter="true"
-          :pt="{
+          optionGroupChildren="recipes" :placeholder="modelValue.recipe?.name ?? 'please select a recipe'"
+          :filter="true" :pt="{
             input: { class: 'py-2 px-3' },
           }">
           <template #optiongroup="slotProps">
@@ -35,7 +30,7 @@
         </Dropdown>
         <NuxtLink v-else :to="`/recipes/${modelValue.recipe.id}`">{{
           modelValue.recipe.name
-        }}</NuxtLink>
+          }}</NuxtLink>
       </div>
       <div class="flex flex-col items-end gap-1 text-xs ml-auto text-right">
         <span>
@@ -45,7 +40,8 @@
       </div>
     </div>
     <div class="flex gap-2">
-      <RecipeCategory v-if="modelValue.recipe" v-for="category in modelValue.recipe.categories" :category="category"></RecipeCategory>
+      <RecipeCategory v-if="modelValue.recipe" v-for="category in modelValue.recipe.categories" :category="category">
+      </RecipeCategory>
     </div>
   </div>
 </template>
